@@ -38,59 +38,71 @@ describe("tasksApi", () => {
       expect.objectContaining({ overrideExisting: false })
     );
 
-    const getTasks = tasksApi.endpoints.getTasks as {
-      query: () => unknown;
-      providesTags: (result?: Array<{ id: string }>) => unknown;
-    };
-    const getTask = tasksApi.endpoints.getTask as {
-      query: (id: string) => unknown;
-      providesTags: (_result: unknown, _err: unknown, id: string) => unknown;
-    };
-    const createTask = tasksApi.endpoints.createTask as {
-      query: (body: { title: string }) => unknown;
-      invalidatesTags: unknown;
-    };
-    const updateTask = tasksApi.endpoints.updateTask as {
-      query: (body: { id: string; status: string }) => unknown;
-      invalidatesTags: (_result: unknown, _err: unknown, body: { id: string }) => unknown;
-    };
-    const deleteTask = tasksApi.endpoints.deleteTask as {
-      query: (id: string) => unknown;
-      invalidatesTags: unknown;
+    void tasksApi;
+
+    const config = injectEndpointsMock.mock.calls[0]?.[0];
+    if (!config) {
+      throw new Error("injectEndpoints was not called");
+    }
+
+    const endpoints = config.endpoints({
+      mutation: <T>(definition: T) => definition,
+      query: <T>(definition: T) => definition,
+    }) as {
+      getTasks: {
+        query: () => unknown;
+        providesTags: (result?: Array<{ id: string }>) => unknown;
+      };
+      getTask: {
+        query: (id: string) => unknown;
+        providesTags: (_result: unknown, _err: unknown, id: string) => unknown;
+      };
+      createTask: {
+        query: (body: { title: string }) => unknown;
+        invalidatesTags: unknown;
+      };
+      updateTask: {
+        query: (body: { id: string; status: string }) => unknown;
+        invalidatesTags: (_result: unknown, _err: unknown, body: { id: string }) => unknown;
+      };
+      deleteTask: {
+        query: (id: string) => unknown;
+        invalidatesTags: unknown;
+      };
     };
 
-    expect(getTasks.query()).toBe("/tasks");
-    expect(getTasks.providesTags([{ id: "task-1" }])).toEqual([
+    expect(endpoints.getTasks.query()).toBe("/tasks");
+    expect(endpoints.getTasks.providesTags([{ id: "task-1" }])).toEqual([
       { type: "Task", id: "task-1" },
       { type: "Task", id: "LIST" },
     ]);
-    expect(getTasks.providesTags()).toEqual([{ type: "Task", id: "LIST" }]);
+    expect(endpoints.getTasks.providesTags()).toEqual([{ type: "Task", id: "LIST" }]);
 
-    expect(getTask.query("task-1")).toBe("/tasks/task-1");
-    expect(getTask.providesTags(undefined, undefined, "task-1")).toEqual([
+    expect(endpoints.getTask.query("task-1")).toBe("/tasks/task-1");
+    expect(endpoints.getTask.providesTags(undefined, undefined, "task-1")).toEqual([
       { type: "Task", id: "task-1" },
     ]);
 
-    expect(createTask.query({ title: "New task" })).toEqual({
+    expect(endpoints.createTask.query({ title: "New task" })).toEqual({
       url: "/tasks",
       method: "POST",
       body: { title: "New task" },
     });
-    expect(createTask.invalidatesTags).toEqual([{ type: "Task", id: "LIST" }]);
+    expect(endpoints.createTask.invalidatesTags).toEqual([{ type: "Task", id: "LIST" }]);
 
-    expect(updateTask.query({ id: "task-1", status: "DONE" })).toEqual({
+    expect(endpoints.updateTask.query({ id: "task-1", status: "DONE" })).toEqual({
       url: "/tasks/task-1",
       method: "PATCH",
       body: { status: "DONE" },
     });
-    expect(updateTask.invalidatesTags(undefined, undefined, { id: "task-1" })).toEqual([
+    expect(endpoints.updateTask.invalidatesTags(undefined, undefined, { id: "task-1" })).toEqual([
       { type: "Task", id: "task-1" },
     ]);
 
-    expect(deleteTask.query("task-1")).toEqual({
+    expect(endpoints.deleteTask.query("task-1")).toEqual({
       url: "/tasks/task-1",
       method: "DELETE",
     });
-    expect(deleteTask.invalidatesTags).toEqual([{ type: "Task", id: "LIST" }]);
+    expect(endpoints.deleteTask.invalidatesTags).toEqual([{ type: "Task", id: "LIST" }]);
   });
 });

@@ -22,6 +22,9 @@ RUN pnpm install --frozen-lockfile
 # Build shared packages before the apps that consume them
 RUN pnpm --filter @repo/shared build
 
+# Fail early if shared declarations were not produced inside the image.
+RUN test -f packages/shared/dist/index.d.ts
+
 # Copy source and build
 COPY apps/api/src ./apps/api/src
 RUN pnpm --filter api db:generate

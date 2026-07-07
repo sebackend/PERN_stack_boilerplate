@@ -16,6 +16,7 @@ COPY packages/shared ./packages/shared
 # Copy web app files
 COPY apps/web/package.json ./apps/web/package.json
 COPY apps/web/tsconfig.json ./apps/web/tsconfig.json
+COPY apps/web/tsconfig.build.json ./apps/web/tsconfig.build.json
 COPY apps/web/vite.config.ts ./apps/web/vite.config.ts
 COPY apps/web/index.html ./apps/web/index.html
 
