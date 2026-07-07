@@ -27,7 +27,23 @@ const server = spawn(process.execPath, ["/app/dist/server.js"], {
   stdio: "inherit",
 });
 
-server.on("exit", (code) => {
+let stopping = false;
+
+const forwardSignal = (signal) => {
+  if (stopping) return;
+  stopping = true;
+  server.kill(signal);
+};
+
+process.on("SIGINT", () => forwardSignal("SIGINT"));
+process.on("SIGTERM", () => forwardSignal("SIGTERM"));
+
+server.on("exit", (code, signal) => {
+  if (signal) {
+    process.kill(process.pid, signal);
+    return;
+  }
+
   process.exit(code ?? 0);
 });
 

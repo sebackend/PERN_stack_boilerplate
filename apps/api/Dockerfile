@@ -51,4 +51,4 @@ COPY apps/api/docker-entrypoint.mjs /app/docker-entrypoint.mjs
 
 EXPOSE 3000
 
-CMD ["/app/docker-entrypoint.mjs"]
+CMD ["node", "/app/docker-entrypoint.mjs"]
