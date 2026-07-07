@@ -12,14 +12,6 @@ export const logger = pino(
       }
     : env.NODE_ENV === "development"
     ? {
-        transport: {
-          target: "pino-pretty",
-          options: {
-            colorize: true,
-            translateTime: "SYS:HH:MM:ss",
-            ignore: "pid,hostname",
-          },
-        },
         level: "debug",
       }
     : {
