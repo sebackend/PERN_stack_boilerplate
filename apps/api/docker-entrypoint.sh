@@ -2,8 +2,8 @@
 set -e
 
 echo "Applying migrations..."
-cd /app/apps/api
-npx prisma migrate deploy
+cd /app
+./node_modules/.bin/prisma migrate deploy
 
 echo "Starting API..."
-exec node /app/apps/api/dist/server.js
+exec node /app/dist/server.js
