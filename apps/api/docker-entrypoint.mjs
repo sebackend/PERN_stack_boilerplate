@@ -20,7 +20,7 @@ function run(command, args, options = {}) {
 }
 
 console.log("Applying migrations...");
-await run("./node_modules/.bin/prisma", ["migrate", "deploy"], { cwd: "/app" });
+await run("./node_modules/.bin/prisma", ["migrate", "deploy", "--config", "./prisma.config.ts"], { cwd: "/app" });
 
 console.log("Starting API...");
 const server = spawn(process.execPath, ["/app/dist/server.js"], {
