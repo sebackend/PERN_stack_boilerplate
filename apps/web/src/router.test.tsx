@@ -19,7 +19,7 @@ describe("AppRouter", () => {
     window.history.pushState({}, "", "/");
   });
 
-  it("redirige / a /tasks", async () => {
+  it("redirects / to /tasks", async () => {
     render(<AppRouter />);
 
     expect(await screen.findByText("Tasks Page")).toBeInTheDocument();
@@ -28,7 +28,7 @@ describe("AppRouter", () => {
     });
   });
 
-  it("renderiza la ruta de login", async () => {
+  it("renders the login route", async () => {
     window.history.pushState({}, "", "/login");
 
     render(<AppRouter />);
@@ -36,7 +36,7 @@ describe("AppRouter", () => {
     expect(await screen.findByText("Login Page")).toBeInTheDocument();
   });
 
-  it("redirige rutas desconocidas al inicio y termina en /tasks", async () => {
+  it("redirects unknown routes to the root and ends on /tasks", async () => {
     window.history.pushState({}, "", "/unknown");
 
     render(<AppRouter />);

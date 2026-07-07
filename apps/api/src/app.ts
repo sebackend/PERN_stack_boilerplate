@@ -8,7 +8,7 @@ import { tasksRoutes } from "./modules/tasks/tasks.routes.js";
 export function createApp(): Express {
   const app = express();
 
-  // ─── Middlewares globales ─────────────────────────────────────────────────
+  // ─── Global middleware ─────────────────────────────────────────────────────
   app.use(loggingMiddleware);
   app.use(corsMiddleware);
   app.use(express.json());
@@ -18,16 +18,16 @@ export function createApp(): Express {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
   });
 
-  // ─── Rutas por versión ────────────────────────────────────────────────────
+  // ─── Versioned routes ─────────────────────────────────────────────────────
   app.use("/api/v1/auth", authRoutes);
   app.use("/api/v1/tasks", tasksRoutes);
 
   // ─── 404 handler ─────────────────────────────────────────────────────────
   app.use((_req, res) => {
-    res.status(404).json({ error: "Ruta no encontrada", statusCode: 404 });
+    res.status(404).json({ error: "Route not found", statusCode: 404 });
   });
 
-  // ─── Error handler central ────────────────────────────────────────────────
+  // ─── Central error handler ────────────────────────────────────────────────
   app.use(errorHandler);
 
   return app;

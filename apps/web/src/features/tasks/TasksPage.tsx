@@ -8,9 +8,9 @@ import { logout } from "../auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 const STATUS_CONFIG: Record<TaskStatus, { label: string; color: string }> = {
-  PENDING: { label: "Pendiente", color: "bg-gray-100 text-gray-700" },
-  IN_PROGRESS: { label: "En progreso", color: "bg-blue-100 text-blue-700" },
-  DONE: { label: "Completada", color: "bg-green-100 text-green-700" },
+  PENDING: { label: "Pending", color: "bg-gray-100 text-gray-700" },
+  IN_PROGRESS: { label: "In progress", color: "bg-blue-100 text-blue-700" },
+  DONE: { label: "Done", color: "bg-green-100 text-green-700" },
 };
 
 export default function TasksPage() {
@@ -28,7 +28,7 @@ export default function TasksPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("¿Eliminar esta tarea?")) return;
+    if (!confirm("Delete this task?")) return;
     setDeletingId(id);
     try {
       await deleteTask(id).unwrap();
@@ -79,7 +79,7 @@ export default function TasksPage() {
               onClick={handleLogout}
               className="text-sm text-gray-600 hover:text-gray-900 font-medium transition"
             >
-              Cerrar sesión
+              Sign out
             </button>
           </div>
         </div>
@@ -90,10 +90,10 @@ export default function TasksPage() {
         {/* Top bar */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Mis tareas</h2>
+              <h2 className="text-xl font-semibold text-gray-900">My tasks</h2>
             {tasks && (
               <p className="text-sm text-gray-500 mt-0.5">
-                {tasks.length} {tasks.length === 1 ? "tarea" : "tareas"}
+                {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
               </p>
             )}
           </div>
@@ -103,30 +103,30 @@ export default function TasksPage() {
                        px-4 py-2.5 rounded-lg transition focus:outline-none focus:ring-2
                        focus:ring-blue-500 focus:ring-offset-2"
           >
-            + Nueva tarea
+            + New task
           </button>
         </div>
 
         {/* States */}
         {isLoading && (
-          <div className="text-center py-16 text-gray-400 text-sm">Cargando tareas...</div>
+          <div className="text-center py-16 text-gray-400 text-sm">Loading tasks...</div>
         )}
 
         {isError && (
           <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-4 text-sm text-red-700 text-center">
-            Error al cargar tareas. Intenta recargar la página.
+            Error loading tasks. Try refreshing the page.
           </div>
         )}
 
         {/* Task list */}
         {tasks && tasks.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-gray-400 text-sm">No tienes tareas todavía.</p>
+            <p className="text-gray-400 text-sm">You do not have any tasks yet.</p>
             <button
               onClick={() => setShowForm(true)}
               className="mt-3 text-blue-600 hover:underline text-sm font-medium"
             >
-              Crear la primera
+               Create the first one
             </button>
           </div>
         )}
@@ -142,17 +142,17 @@ export default function TasksPage() {
                              hover:border-gray-300 transition"
                 >
                   <div className="flex items-start gap-4">
-                    {/* Status badge (clickeable para ciclar) */}
+                    {/* Clickable status badge to cycle status */}
                     <button
                       onClick={() => handleQuickStatus(task)}
-                      title="Cambiar estado"
+                       title="Change status"
                       className={`mt-0.5 shrink-0 text-xs font-medium px-2.5 py-1 rounded-full
                                   cursor-pointer transition hover:opacity-80 ${cfg.color}`}
                     >
                       {cfg.label}
                     </button>
 
-                    {/* Contenido */}
+                    {/* Content */}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate">
                         {task.title}
@@ -163,7 +163,7 @@ export default function TasksPage() {
                         </p>
                       )}
                       <p className="text-xs text-gray-400 mt-1">
-                        {new Date(task.createdAt).toLocaleDateString("es-ES", {
+                        {new Date(task.createdAt).toLocaleDateString("en-US", {
                           day: "numeric",
                           month: "short",
                           year: "numeric",
@@ -171,14 +171,14 @@ export default function TasksPage() {
                       </p>
                     </div>
 
-                    {/* Acciones */}
+                    {/* Actions */}
                     <div className="flex items-center gap-2 shrink-0">
                       <button
                         onClick={() => handleEdit(task)}
                         className="text-xs text-gray-500 hover:text-gray-900 font-medium
                                    px-2.5 py-1.5 rounded-lg hover:bg-gray-100 transition"
                       >
-                        Editar
+                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(task.id)}
@@ -187,10 +187,10 @@ export default function TasksPage() {
                                    px-2.5 py-1.5 rounded-lg hover:bg-red-50 transition
                                    disabled:opacity-50"
                       >
-                        {isDeleting && deletingId === task.id ? "..." : "Eliminar"}
-                      </button>
-                    </div>
-                  </div>
+                         {isDeleting && deletingId === task.id ? "..." : "Delete"}
+                       </button>
+                     </div>
+                   </div>
                 </li>
               );
             })}

@@ -8,16 +8,16 @@ const app = createApp();
 const server = app.listen(env.API_PORT, () => {
   logger.info(
     { port: env.API_PORT, env: env.NODE_ENV },
-    `API corriendo en http://localhost:${env.API_PORT}`
+    `API running at http://localhost:${env.API_PORT}`
   );
 });
 
 // ─── Graceful shutdown ────────────────────────────────────────────────────────
 const shutdown = async (signal: string) => {
-  logger.info({ signal }, "Cerrando servidor...");
+  logger.info({ signal }, "Shutting down server...");
   server.close(async () => {
     await prisma.$disconnect();
-    logger.info("Servidor cerrado correctamente");
+    logger.info("Server shut down successfully");
     process.exit(0);
   });
 };

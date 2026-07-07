@@ -37,17 +37,17 @@ describe("tasks routes", () => {
     vi.clearAllMocks();
   });
 
-  it("GET /api/v1/tasks requiere autenticación", async () => {
+  it("GET /api/v1/tasks requires authentication", async () => {
     const response = await request(createApp()).get("/api/v1/tasks");
 
     expect(response.status).toBe(401);
     expect(response.body).toMatchObject({
-      error: "Token no proporcionado",
+      error: "Token not provided",
       statusCode: 401,
     });
   });
 
-  it("GET /api/v1/tasks devuelve tareas del usuario", async () => {
+  it("GET /api/v1/tasks returns the user's tasks", async () => {
     const accessToken = await signAccessToken();
     mockPrismaTask.findMany.mockResolvedValue([baseTask]);
 
@@ -65,7 +65,7 @@ describe("tasks routes", () => {
     ]);
   });
 
-  it("POST /api/v1/tasks crea una tarea", async () => {
+  it("POST /api/v1/tasks creates a task", async () => {
     const accessToken = await signAccessToken();
     mockPrismaTask.create.mockResolvedValue(baseTask);
 
@@ -82,7 +82,7 @@ describe("tasks routes", () => {
     });
   });
 
-  it("POST /api/v1/tasks valida el body", async () => {
+  it("POST /api/v1/tasks validates the body", async () => {
     const accessToken = await signAccessToken();
 
     const response = await request(createApp())
@@ -92,12 +92,12 @@ describe("tasks routes", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toMatchObject({
-      error: "Error de validación",
+      error: "Validation error",
       statusCode: 422,
     });
   });
 
-  it("GET /api/v1/tasks/:id devuelve 404 si no existe", async () => {
+  it("GET /api/v1/tasks/:id returns 404 when the task does not exist", async () => {
     const accessToken = await signAccessToken();
     mockPrismaTask.findFirst.mockResolvedValue(null);
 
@@ -107,12 +107,12 @@ describe("tasks routes", () => {
 
     expect(response.status).toBe(404);
     expect(response.body).toMatchObject({
-      error: "Tarea no encontrado",
+      error: "Task not found",
       statusCode: 404,
     });
   });
 
-  it("PATCH /api/v1/tasks/:id actualiza una tarea", async () => {
+  it("PATCH /api/v1/tasks/:id updates a task", async () => {
     const accessToken = await signAccessToken();
     const updatedTask = { ...baseTask, status: "DONE" as const };
     mockPrismaTask.findFirst.mockResolvedValue(baseTask);
@@ -131,7 +131,7 @@ describe("tasks routes", () => {
     });
   });
 
-  it("DELETE /api/v1/tasks/:id elimina una tarea", async () => {
+  it("DELETE /api/v1/tasks/:id deletes a task", async () => {
     const accessToken = await signAccessToken();
     mockPrismaTask.findFirst.mockResolvedValue(baseTask);
     mockPrismaTask.delete.mockResolvedValue(baseTask);
@@ -144,7 +144,7 @@ describe("tasks routes", () => {
     expect(response.text).toBe("");
   });
 
-  it("GET /api/v1/tasks/:id devuelve 422 si el id es vacío o whitespace", async () => {
+  it("GET /api/v1/tasks/:id returns 422 when the id is empty or whitespace", async () => {
     const accessToken = await signAccessToken();
 
     const response = await request(createApp())
@@ -153,12 +153,12 @@ describe("tasks routes", () => {
 
     expect(response.status).toBe(422);
     expect(response.body).toMatchObject({
-      error: "Error de validación",
+      error: "Validation error",
       statusCode: 422,
     });
   });
 
-  it("GET /api/v1/tasks devuelve 500 ante error inesperado", async () => {
+  it("GET /api/v1/tasks returns 500 on unexpected errors", async () => {
     const accessToken = await signAccessToken();
     mockPrismaTask.findMany.mockRejectedValue(new Error("db down"));
 
@@ -168,7 +168,7 @@ describe("tasks routes", () => {
 
     expect(response.status).toBe(500);
     expect(response.body).toMatchObject({
-      error: "Error interno del servidor",
+      error: "Internal server error",
       statusCode: 500,
     });
   });

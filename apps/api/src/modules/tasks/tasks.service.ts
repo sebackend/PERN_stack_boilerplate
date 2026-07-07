@@ -41,7 +41,7 @@ export const tasksService = {
     input: UpdateTaskInput
   ): Promise<TaskResponse> {
     const existing = await prisma.task.findFirst({ where: { id, userId } });
-    if (!existing) throw new NotFoundError("Tarea");
+    if (!existing) throw new NotFoundError("Task");
 
     const task = await prisma.task.update({
       where: { id },
@@ -56,7 +56,7 @@ export const tasksService = {
 
   async delete(id: string, userId: string): Promise<void> {
     const existing = await prisma.task.findFirst({ where: { id, userId } });
-    if (!existing) throw new NotFoundError("Tarea");
+    if (!existing) throw new NotFoundError("Task");
     await prisma.task.delete({ where: { id } });
   },
 };

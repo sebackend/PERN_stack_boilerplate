@@ -1,10 +1,10 @@
-# Task Manager — Boilerplate PERN Stack v1
+# Task Manager - PERN Stack Boilerplate v1
 
-Monorepo con Express 5 + React 19, siguiendo el blueprint `BOILERPLATE_BLUEPRINT_NODE_REACT.md`.
+Monorepo with Express 5 + React 19, based on the `BOILERPLATE_BLUEPRINT_NODE_REACT.md` blueprint.
 
 ## Stack
 
-| Capa | Tecnología |
+| Layer | Technology |
 |---|---|
 | Runtime | Node.js 20+ |
 | Monorepo | pnpm workspaces + Turborepo 2 |
@@ -12,43 +12,43 @@ Monorepo con Express 5 + React 19, siguiendo el blueprint `BOILERPLATE_BLUEPRINT
 | ORM | Prisma 6 + PostgreSQL 17 |
 | Auth | jose (JWT) + argon2 |
 | Logging | Pino + pino-http |
-| Validación | Zod 3 (schemas compartidos front/back) |
-| Jobs | BullMQ 5 + Redis 7 (scaffold configurado, sin workers) |
+| Validation | Zod 3 (shared front/back schemas) |
+| Jobs | BullMQ 5 + Redis 7 (scaffolded, no workers yet) |
 | Frontend | React 19 + Vite 6 |
-| Estado | Redux Toolkit 2 + RTK Query |
+| State | Redux Toolkit 2 + RTK Query |
 | Routing | React Router 7 |
-| Estilos | Tailwind CSS 4 |
+| Styling | Tailwind CSS 4 |
 | Testing | Vitest 3 + Supertest + Testing Library + jsdom |
 
-## Setup rápido
+## Quick Setup
 
-### 1. Instalar dependencias
+### 1. Install dependencies
 ```bash
 pnpm install
 ```
 
-### 2. Variables de entorno
+### 2. Environment variables
 ```bash
 cp .env.example .env
-# Editar .env si necesario (los valores por defecto funcionan para dev local)
+# Edit .env if needed; the default values work for local development
 ```
 
-### 3. Levantar Postgres + Redis
+### 3. Start Postgres + Redis
 ```bash
 docker compose -f docker-compose.dev.yml up -d
 ```
 
-### 4. Migración + seed
+### 4. Run migrations + seed
 ```bash
-pnpm --filter api db:migrate    # crea tablas
-pnpm --filter api db:seed       # crea usuario de prueba
+pnpm --filter api db:migrate    # creates tables
+pnpm --filter api db:seed       # creates the sample user
 ```
 
-Credenciales del seed:
+Seed credentials:
 - **Email:** `admin@example.com`
 - **Password:** `password123`
 
-### 5. Levantar todo
+### 5. Start everything
 ```bash
 pnpm dev
 ```
@@ -56,89 +56,89 @@ pnpm dev
 - API: http://localhost:3000
 - Web: http://localhost:5173
 
-Notas:
-- El frontend intenta recuperar la sesión automáticamente con `refresh token` ante expiración del `access token`.
-- Las rutas protegidas validan la sesión con `/auth/me` antes de renderizar la vista privada.
+Notes:
+- The frontend automatically attempts session recovery with the `refresh token` when the `access token` expires.
+- Protected routes validate the session with `/auth/me` before rendering the private view.
 
-## Endpoints de la API
+## API Endpoints
 
 ```
 GET  /health
 
 POST /api/v1/auth/login
 POST /api/v1/auth/refresh
-POST /api/v1/auth/logout        ← requiere auth
-GET  /api/v1/auth/me            ← requiere auth
+POST /api/v1/auth/logout        <- requires auth
+GET  /api/v1/auth/me            <- requires auth
 
-GET    /api/v1/tasks            ← requiere auth
-POST   /api/v1/tasks            ← requiere auth
-GET    /api/v1/tasks/:id        ← requiere auth
-PATCH  /api/v1/tasks/:id        ← requiere auth
-DELETE /api/v1/tasks/:id        ← requiere auth
+GET    /api/v1/tasks            <- requires auth
+POST   /api/v1/tasks            <- requires auth
+GET    /api/v1/tasks/:id        <- requires auth
+PATCH  /api/v1/tasks/:id        <- requires auth
+DELETE /api/v1/tasks/:id        <- requires auth
 ```
 
-## Calidad y tests
+## Quality And Tests
 
 ### Lint
 ```bash
 pnpm lint
 ```
 
-### Tests del monorepo
+### Monorepo tests
 ```bash
 pnpm test
 ```
 
-### Tests de API
+### API tests
 ```bash
 pnpm --filter api test
 ```
 
-Cobertura actual:
-- Unit tests de servicios y queries
-- Tests HTTP con `supertest` para auth y tasks
+Current coverage:
+- Service and query unit tests
+- HTTP tests with `supertest` for auth and tasks
 
-### Tests de Web
+### Web tests
 ```bash
 pnpm --filter web test
 ```
 
-Cobertura actual:
-- Unit tests con `Vitest + Testing Library + jsdom`
-- Estado de autenticación
-- UI del formulario de tareas
+Current coverage:
+- Unit tests with `Vitest + Testing Library + jsdom`
+- Authentication state
+- Task form UI
 
-## Deploy con Docker (stack completo)
+## Docker Deployment
 ```bash
-# Construir e iniciar todos los servicios
+# Build and start all services
 docker compose up --build -d
 
-# Web disponible en http://localhost
-# API disponible en http://localhost:3000
+# Web available at http://localhost
+# API available at http://localhost:3000
 ```
 
-Notas:
-- Requiere un archivo `.env` en la raíz del repo.
-- Los builds Docker usan el lockfile del workspace y compilan `@repo/shared` antes de construir `api` y `web`.
+Notes:
+- Requires a `.env` file at the repository root.
+- Docker builds use the workspace lockfile and compile `@repo/shared` before building `api` and `web`.
 
-## Estructura del proyecto
+## Project Structure
 ```
 boilerplate_PERN_stack_v1/
 ├── apps/
 │   ├── api/          # Express 5 + Prisma + Auth + Tasks
 │   └── web/          # React 19 + RTK Query + Tailwind
 └── packages/
-    ├── shared/       # Schemas Zod compartidos (fuente de verdad)
-    ├── tsconfig/     # TSConfig base reutilizable
+    ├── shared/       # Shared Zod schemas (source of truth)
+    ├── tsconfig/     # Reusable base TSConfig
     └── eslint-config/
 ```
 
-## Estado actual del boilerplate
+## Current Boilerplate Status
 
-- Auth completa en API: `login`, `refresh`, `logout`, `me`
-- Recuperación automática de sesión en frontend
-- CRUD de tasks protegido por JWT
-- Validación compartida con Zod entre frontend y backend
-- Lint operativo con ESLint 9 flat config
-- Docker listo para builds reproducibles del monorepo
-- Redis/BullMQ presente como base, pero sin workers ni jobs de negocio implementados todavía
+- Complete auth flow in the API: `login`, `refresh`, `logout`, `me`
+- Automatic session recovery in the frontend
+- JWT-protected task CRUD
+- Shared Zod validation between frontend and backend
+- Working lint setup with ESLint 9 flat config
+- Docker ready for reproducible monorepo builds
+- Redis/BullMQ included as a foundation, but no business workers or jobs implemented yet

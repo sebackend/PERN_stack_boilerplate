@@ -1,6 +1,6 @@
 import { vi } from "vitest";
 
-// Mock de variables de entorno para tests
+// Mock environment variables for tests.
 process.env["NODE_ENV"] = "test";
 process.env["DATABASE_URL"] = "postgresql://postgres:postgres@localhost:5432/taskmanager_test";
 process.env["REDIS_URL"] = "redis://localhost:6379";
@@ -11,7 +11,7 @@ process.env["JWT_REFRESH_EXPIRES_IN"] = "7d";
 process.env["API_PORT"] = "3001";
 process.env["API_CORS_ORIGIN"] = "http://localhost:5173";
 
-// Mock Prisma para no necesitar DB real en unit tests
+// Mock Prisma so unit tests do not require a real database.
 vi.mock("../lib/prisma.js", () => ({
   prisma: {
     user: {

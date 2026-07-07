@@ -33,7 +33,7 @@ vi.mock("../../store/api", () => ({
 import { tasksApi } from "./tasksApi";
 
 describe("tasksApi", () => {
-  it("define queries, mutations y tags esperados", () => {
+  it("defines the expected queries, mutations, and tags", () => {
     expect(injectEndpointsMock).toHaveBeenCalledWith(
       expect.objectContaining({ overrideExisting: false })
     );
@@ -71,10 +71,10 @@ describe("tasksApi", () => {
       { type: "Task", id: "task-1" },
     ]);
 
-    expect(createTask.query({ title: "Nueva tarea" })).toEqual({
+    expect(createTask.query({ title: "New task" })).toEqual({
       url: "/tasks",
       method: "POST",
-      body: { title: "Nueva tarea" },
+      body: { title: "New task" },
     });
     expect(createTask.invalidatesTags).toEqual([{ type: "Task", id: "LIST" }]);
 

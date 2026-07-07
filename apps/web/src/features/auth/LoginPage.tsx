@@ -19,12 +19,12 @@ export default function LoginPage() {
     e.preventDefault();
     setErrorMsg("");
 
-    // 1. Autenticación: solo este paso decide si las credenciales son inválidas
+    // 1. Authentication: only this step decides whether credentials are invalid.
     let tokens;
     try {
       tokens = await login({ email, password }).unwrap();
     } catch {
-      setErrorMsg("Credenciales inválidas. Verifica tu email y contraseña.");
+      setErrorMsg("Invalid credentials. Check your email and password.");
       return;
     }
 
@@ -35,12 +35,12 @@ export default function LoginPage() {
       })
     );
 
-    // 2. Cargar datos del usuario (no crítico para entrar: ya está autenticado)
+    // 2. Load user data. This is not required to enter because auth already succeeded.
     try {
       const me = await fetchMe().unwrap();
       dispatch(setUser(me));
     } catch {
-      // si /auth/me falla, navegamos igual; se reintentará al renderizar
+      // If /auth/me fails, still navigate; the app will retry during rendering.
     }
 
     navigate("/tasks");
@@ -49,10 +49,10 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        {/* Logo / Título */}
+        {/* Logo / Title */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Task Manager</h1>
-          <p className="mt-2 text-sm text-gray-500">Inicia sesión para continuar</p>
+          <p className="mt-2 text-sm text-gray-500">Sign in to continue</p>
         </div>
 
         {/* Card */}
@@ -86,7 +86,7 @@ export default function LoginPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 mb-1.5"
               >
-                Contraseña
+                Password
               </label>
               <input
                 id="password"
@@ -117,7 +117,7 @@ export default function LoginPage() {
                          text-white font-semibold py-2.5 rounded-lg text-sm
                          transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              {isLoading ? "Ingresando..." : "Iniciar sesión"}
+              {isLoading ? "Signing in..." : "Sign in"}
             </button>
           </form>
         </div>

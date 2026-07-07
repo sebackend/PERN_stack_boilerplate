@@ -8,7 +8,7 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction
 ) => {
-  // Error operacional conocido
+  // Known operational error
   if (err instanceof AppError) {
     if (err.statusCode >= 500) {
       logger.error({ err, reqId: req.id }, err.message);
@@ -28,10 +28,10 @@ export const errorHandler = (
     return res.status(err.statusCode).json(body);
   }
 
-  // Error inesperado
-  logger.error({ err, reqId: req.id }, "Error no manejado");
+  // Unexpected error
+  logger.error({ err, reqId: req.id }, "Unhandled error");
   return res.status(500).json({
-    error: "Error interno del servidor",
+    error: "Internal server error",
     statusCode: 500,
   });
 };

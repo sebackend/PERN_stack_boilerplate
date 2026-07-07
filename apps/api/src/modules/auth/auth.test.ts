@@ -21,7 +21,7 @@ describe("authService", () => {
   });
 
   describe("login", () => {
-    it("devuelve tokens con credenciales válidas", async () => {
+    it("returns tokens for valid credentials", async () => {
       mockPrismaUser.findUnique.mockResolvedValue({
         id: "user-1",
         email: "admin@example.com",
@@ -43,7 +43,7 @@ describe("authService", () => {
       expect(typeof result.refreshToken).toBe("string");
     });
 
-    it("lanza UnauthorizedError si el usuario no existe", async () => {
+    it("throws UnauthorizedError when the user does not exist", async () => {
       mockPrismaUser.findUnique.mockResolvedValue(null);
 
       await expect(
@@ -51,7 +51,7 @@ describe("authService", () => {
       ).rejects.toMatchObject({ statusCode: 401 });
     });
 
-    it("lanza UnauthorizedError si la contraseña es incorrecta", async () => {
+    it("throws UnauthorizedError when the password is incorrect", async () => {
       mockPrismaUser.findUnique.mockResolvedValue({
         id: "user-1",
         email: "admin@example.com",

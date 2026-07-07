@@ -6,7 +6,7 @@ describe("main", () => {
     document.body.innerHTML = '<div id="root"></div>';
   });
 
-  it("monta la app en el nodo root", async () => {
+  it("mounts the app into the root node", async () => {
     const renderMock = vi.fn();
     const createRootMock = vi.fn(() => ({ render: renderMock }));
 

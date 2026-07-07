@@ -24,7 +24,7 @@ const baseTask = {
 describe("tasksQuery", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("findAll devuelve tareas serializadas", async () => {
+  it("findAll returns serialized tasks", async () => {
     mockPrismaTask.findMany.mockResolvedValue([baseTask]);
 
     const result = await tasksQuery.findAll("user-1");
@@ -38,7 +38,7 @@ describe("tasksQuery", () => {
     expect(typeof result[0]!.createdAt).toBe("string"); // ISO string
   });
 
-  it("findById devuelve null si no encuentra", async () => {
+  it("findById returns null when the task is not found", async () => {
     mockPrismaTask.findFirst.mockResolvedValue(null);
 
     const result = await tasksQuery.findById("x", "user-1");
@@ -49,22 +49,22 @@ describe("tasksQuery", () => {
 describe("tasksService", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("create devuelve tarea creada", async () => {
+  it("create returns the created task", async () => {
     mockPrismaTask.create.mockResolvedValue({
       ...baseTask,
-      title: "Nueva tarea",
+      title: "New task",
     });
 
-    const result = await tasksService.create("user-1", { title: "Nueva tarea" });
+    const result = await tasksService.create("user-1", { title: "New task" });
 
-    expect(result.title).toBe("Nueva tarea");
+    expect(result.title).toBe("New task");
     expect(result.userId).toBe("user-1");
   });
 
-  it("delete lanza NotFoundError si la tarea no pertenece al usuario", async () => {
+  it("delete throws NotFoundError when the task does not belong to the user", async () => {
     mockPrismaTask.findFirst.mockResolvedValue(null);
 
-    await expect(tasksService.delete("task-1", "otro-user")).rejects.toMatchObject({
+    await expect(tasksService.delete("task-1", "other-user")).rejects.toMatchObject({
       statusCode: 404,
     });
   });

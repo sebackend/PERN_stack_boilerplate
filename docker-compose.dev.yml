@@ -1,7 +1,7 @@
-# Docker Compose para desarrollo local
-# Solo levanta Postgres + Redis (la API y Web corren con pnpm dev)
+# Docker Compose for local development
+# Only starts Postgres + Redis (API and Web run with pnpm dev)
 #
-# Uso:
+# Usage:
 #   docker compose -f docker-compose.dev.yml up -d
 
 services:

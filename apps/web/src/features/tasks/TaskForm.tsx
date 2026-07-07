@@ -8,9 +8,9 @@ interface TaskFormProps {
 }
 
 const STATUS_LABELS: Record<TaskStatus, string> = {
-  PENDING: "Pendiente",
-  IN_PROGRESS: "En progreso",
-  DONE: "Completada",
+  PENDING: "Pending",
+  IN_PROGRESS: "In progress",
+  DONE: "Done",
 };
 
 export default function TaskForm({ task, onClose }: TaskFormProps) {
@@ -30,7 +30,7 @@ export default function TaskForm({ task, onClose }: TaskFormProps) {
     setError("");
 
     if (!title.trim()) {
-      setError("El título es requerido");
+      setError("Title is required");
       return;
     }
 
@@ -51,7 +51,7 @@ export default function TaskForm({ task, onClose }: TaskFormProps) {
       }
       onClose();
     } catch {
-      setError("Ocurrió un error. Intenta de nuevo.");
+      setError("Something went wrong. Please try again.");
     }
   };
 
@@ -59,35 +59,35 @@ export default function TaskForm({ task, onClose }: TaskFormProps) {
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-5">
-          {isEditing ? "Editar tarea" : "Nueva tarea"}
+          {isEditing ? "Edit task" : "New task"}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Título */}
+          {/* Title */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Título <span className="text-red-500">*</span>
+              Title <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Nombre de la tarea"
+              placeholder="Task name"
               maxLength={200}
               className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm
                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
-          {/* Descripción */}
+          {/* Description */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Descripción
+              Description
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Descripción opcional..."
+              placeholder="Optional description..."
               rows={3}
               maxLength={2000}
               className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm
@@ -96,10 +96,10 @@ export default function TaskForm({ task, onClose }: TaskFormProps) {
             />
           </div>
 
-          {/* Estado */}
+          {/* Status */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
-              Estado
+              Status
             </label>
             <select
               value={status}
@@ -122,7 +122,7 @@ export default function TaskForm({ task, onClose }: TaskFormProps) {
             </div>
           )}
 
-          {/* Acciones */}
+          {/* Actions */}
           <div className="flex gap-3 pt-1">
             <button
               type="button"
@@ -130,7 +130,7 @@ export default function TaskForm({ task, onClose }: TaskFormProps) {
               className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 text-sm font-medium
                          text-gray-700 hover:bg-gray-50 transition"
             >
-              Cancelar
+               Cancel
             </button>
             <button
               type="submit"
@@ -138,7 +138,7 @@ export default function TaskForm({ task, onClose }: TaskFormProps) {
               className="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700
                          disabled:bg-blue-400 text-white text-sm font-semibold transition"
             >
-              {isLoading ? "Guardando..." : isEditing ? "Guardar" : "Crear"}
+              {isLoading ? "Saving..." : isEditing ? "Save" : "Create"}
             </button>
           </div>
         </form>

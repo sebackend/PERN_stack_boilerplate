@@ -1,9 +1,9 @@
 #!/bin/sh
 set -e
 
-echo "Aplicando migraciones..."
+echo "Applying migrations..."
 cd /app/apps/api
 npx prisma migrate deploy
 
-echo "Iniciando API..."
+echo "Starting API..."
 exec node /app/apps/api/dist/server.js

@@ -50,7 +50,7 @@ describe("store api", () => {
     vi.unstubAllGlobals();
   });
 
-  it("envía Authorization cuando hay access token", async () => {
+  it("sends Authorization when there is an access token", async () => {
     const fetchMock = vi.mocked(fetch);
     const store = createTestStore({ accessToken: "access-token", isAuthenticated: true });
 
@@ -63,7 +63,7 @@ describe("store api", () => {
     expect(request.headers.get("authorization")).toBe("Bearer access-token");
   });
 
-  it("hace logout si recibe 401 y no hay refresh token", async () => {
+  it("logs out if it receives 401 and there is no refresh token", async () => {
     const fetchMock = vi.mocked(fetch);
     const store = createTestStore({ accessToken: "expired", isAuthenticated: true });
 
@@ -79,7 +79,7 @@ describe("store api", () => {
     });
   });
 
-  it("refresca el token y reintenta la request cuando refresh funciona", async () => {
+  it("refreshes the token and retries the request when refresh succeeds", async () => {
     const fetchMock = vi.mocked(fetch);
     const store = createTestStore({
       accessToken: "expired-token",
@@ -102,7 +102,7 @@ describe("store api", () => {
     expect(new URL(refreshRequest.url).pathname).toBe("/api/v1/auth/refresh");
   });
 
-  it("hace logout si refresh falla", async () => {
+  it("logs out if refresh fails", async () => {
     const fetchMock = vi.mocked(fetch);
     const store = createTestStore({
       accessToken: "expired-token",

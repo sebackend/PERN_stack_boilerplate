@@ -35,7 +35,7 @@ describe("LoginPage", () => {
     fetchMeMock.mockReset();
   });
 
-  it("muestra error cuando las credenciales son inválidas", async () => {
+  it("shows an error when credentials are invalid", async () => {
     const user = userEvent.setup();
 
     loginMock.mockReturnValue({
@@ -45,17 +45,17 @@ describe("LoginPage", () => {
     render(<LoginPage />);
 
     await user.type(screen.getByLabelText("Email"), "admin@example.com");
-    await user.type(screen.getByLabelText("Contraseña"), "wrong-password");
-    await user.click(screen.getByRole("button", { name: "Iniciar sesión" }));
+    await user.type(screen.getByLabelText("Password"), "wrong-password");
+    await user.click(screen.getByRole("button", { name: "Sign in" }));
 
     expect(
-      await screen.findByText("Credenciales inválidas. Verifica tu email y contraseña.")
+      await screen.findByText("Invalid credentials. Check your email and password.")
     ).toBeInTheDocument();
     expect(dispatchMock).not.toHaveBeenCalled();
     expect(navigateMock).not.toHaveBeenCalled();
   });
 
-  it("guarda credenciales, carga el usuario y navega a tasks", async () => {
+  it("stores credentials, loads the user, and navigates to tasks", async () => {
     const user = userEvent.setup();
     const loginUnwrap = vi.fn().mockResolvedValue({
       accessToken: "access-token",
@@ -73,8 +73,8 @@ describe("LoginPage", () => {
     render(<LoginPage />);
 
     await user.type(screen.getByLabelText("Email"), "admin@example.com");
-    await user.type(screen.getByLabelText("Contraseña"), "password123");
-    await user.click(screen.getByRole("button", { name: "Iniciar sesión" }));
+    await user.type(screen.getByLabelText("Password"), "password123");
+    await user.click(screen.getByRole("button", { name: "Sign in" }));
 
     await waitFor(() => {
       expect(dispatchMock).toHaveBeenCalledWith(
@@ -95,7 +95,7 @@ describe("LoginPage", () => {
     expect(navigateMock).toHaveBeenCalledWith("/tasks");
   });
 
-  it("navega aunque falle /auth/me después del login", async () => {
+  it("navigates even if /auth/me fails after login", async () => {
     const user = userEvent.setup();
 
     loginMock.mockReturnValue({
@@ -111,8 +111,8 @@ describe("LoginPage", () => {
     render(<LoginPage />);
 
     await user.type(screen.getByLabelText("Email"), "admin@example.com");
-    await user.type(screen.getByLabelText("Contraseña"), "password123");
-    await user.click(screen.getByRole("button", { name: "Iniciar sesión" }));
+    await user.type(screen.getByLabelText("Password"), "password123");
+    await user.click(screen.getByRole("button", { name: "Sign in" }));
 
     await waitFor(() => {
       expect(dispatchMock).toHaveBeenCalledWith(

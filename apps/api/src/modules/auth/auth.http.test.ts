@@ -43,7 +43,7 @@ describe("auth routes", () => {
     vi.clearAllMocks();
   });
 
-  it("POST /api/v1/auth/login devuelve tokens válidos", async () => {
+  it("POST /api/v1/auth/login returns valid tokens", async () => {
     mockPrismaUser.findUnique.mockResolvedValue(baseUser);
     vi.mocked(argon2.verify).mockResolvedValue(true);
 
@@ -59,20 +59,20 @@ describe("auth routes", () => {
     });
   });
 
-  it("POST /api/v1/auth/login valida el body", async () => {
+  it("POST /api/v1/auth/login validates the body", async () => {
     const response = await request(createApp()).post("/api/v1/auth/login").send({
-      email: "no-es-email",
+      email: "not-an-email",
       password: "123",
     });
 
     expect(response.status).toBe(422);
     expect(response.body).toMatchObject({
-      error: "Error de validación",
+      error: "Validation error",
       statusCode: 422,
     });
   });
 
-  it("POST /api/v1/auth/refresh devuelve nuevo access token", async () => {
+  it("POST /api/v1/auth/refresh returns a new access token", async () => {
     const refreshToken = await signToken("refresh");
 
     const response = await request(createApp()).post("/api/v1/auth/refresh").send({
@@ -83,17 +83,17 @@ describe("auth routes", () => {
     expect(response.body).toEqual({ accessToken: expect.any(String) });
   });
 
-  it("GET /api/v1/auth/me requiere access token", async () => {
+  it("GET /api/v1/auth/me requires an access token", async () => {
     const response = await request(createApp()).get("/api/v1/auth/me");
 
     expect(response.status).toBe(401);
     expect(response.body).toMatchObject({
-      error: "Token no proporcionado",
+      error: "Token not provided",
       statusCode: 401,
     });
   });
 
-  it("GET /api/v1/auth/me devuelve el usuario autenticado", async () => {
+  it("GET /api/v1/auth/me returns the authenticated user", async () => {
     const accessToken = await signToken("access");
     mockPrismaUser.findUnique.mockResolvedValue(baseUser);
 
@@ -109,7 +109,7 @@ describe("auth routes", () => {
     });
   });
 
-  it("POST /api/v1/auth/logout acepta usuarios autenticados", async () => {
+  it("POST /api/v1/auth/logout accepts authenticated users", async () => {
     const accessToken = await signToken("access");
 
     const response = await request(createApp())
@@ -117,6 +117,6 @@ describe("auth routes", () => {
       .set("Authorization", `Bearer ${accessToken}`);
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ message: "Sesión cerrada correctamente" });
+    expect(response.body).toEqual({ message: "Session closed successfully" });
   });
 });

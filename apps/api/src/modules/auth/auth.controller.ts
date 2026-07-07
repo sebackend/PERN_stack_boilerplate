@@ -22,9 +22,9 @@ export const authController = {
   },
 
   async logout(_req: Request, res: Response) {
-    // Stateless JWT: el cliente elimina los tokens
-    // Si se implementara blacklist, aquí se invalida el refreshToken en DB
-    res.status(200).json({ message: "Sesión cerrada correctamente" });
+    // Stateless JWT: the client removes tokens locally.
+    // If a blacklist is added later, invalidate the refresh token in the DB here.
+    res.status(200).json({ message: "Session closed successfully" });
   },
 
   async me(req: Request, res: Response, next: NextFunction) {

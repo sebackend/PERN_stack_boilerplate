@@ -17,7 +17,7 @@ export const tasksController = {
     try {
       const id = req.params["id"] as string;
       const task = await tasksQuery.findById(id, req.user!.id);
-      if (!task) return next(new NotFoundError("Tarea"));
+      if (!task) return next(new NotFoundError("Task"));
       res.status(200).json(task);
     } catch (err) {
       next(err);

@@ -5,11 +5,11 @@ import { env } from "../../config/env.js";
 import { UnauthorizedError, NotFoundError } from "../../lib/errors.js";
 import type { LoginInput, Tokens, UserResponse } from "@repo/shared";
 
-// ─── Helpers JWT ──────────────────────────────────────────────────────────────
+// ─── JWT helpers ──────────────────────────────────────────────────────────────
 
 function parseDuration(d: string): number {
   const match = d.match(/^(\d+)([smhd])$/);
-  if (!match) throw new Error(`Duración inválida: ${d}`);
+  if (!match) throw new Error(`Invalid duration: ${d}`);
   const [, num, unit] = match;
   const n = parseInt(num!, 10);
   const multipliers: Record<string, number> = { s: 1, m: 60, h: 3600, d: 86400 };
@@ -29,19 +29,19 @@ async function signToken(
     .sign(key);
 }
 
-// ─── Auth Service ─────────────────────────────────────────────────────────────
+// ─── Auth service ─────────────────────────────────────────────────────────────
 
 export const authService = {
   async login(input: LoginInput): Promise<Tokens> {
     const user = await prisma.user.findUnique({ where: { email: input.email } });
 
     if (!user) {
-      throw new UnauthorizedError("Credenciales inválidas");
+      throw new UnauthorizedError("Invalid credentials");
     }
 
     const valid = await argon2.verify(user.passwordHash, input.password);
     if (!valid) {
-      throw new UnauthorizedError("Credenciales inválidas");
+      throw new UnauthorizedError("Invalid credentials");
     }
 
     const [accessToken, refreshToken] = await Promise.all([
@@ -66,7 +66,7 @@ export const authService = {
       const { payload } = await jwtVerify(refreshToken, key);
 
       if (payload["type"] !== "refresh") {
-        throw new UnauthorizedError("Tipo de token inválido");
+        throw new UnauthorizedError("Invalid token type");
       }
 
       const accessToken = await signToken(
@@ -77,13 +77,13 @@ export const authService = {
 
       return { accessToken };
     } catch {
-      throw new UnauthorizedError("Refresh token inválido o expirado");
+      throw new UnauthorizedError("Invalid or expired refresh token");
     }
   },
 
   async me(userId: string): Promise<UserResponse> {
     const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user) throw new NotFoundError("Usuario");
+    if (!user) throw new NotFoundError("User");
 
     return {
       id: user.id,

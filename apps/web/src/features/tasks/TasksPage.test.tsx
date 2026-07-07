@@ -58,8 +58,8 @@ vi.mock("./tasksApi", () => ({
 vi.mock("./TaskForm", () => ({
   default: ({ task, onClose }: { task?: { title: string }; onClose: () => void }) => (
     <div data-testid="task-form">
-      <span>{task?.title ?? "Nueva tarea"}</span>
-      <button onClick={onClose}>Cerrar formulario</button>
+      <span>{task?.title ?? "New task"}</span>
+      <button onClick={onClose}>Close form</button>
     </div>
   ),
 }));
@@ -75,39 +75,39 @@ describe("TasksPage", () => {
     vi.stubGlobal("confirm", vi.fn(() => true));
   });
 
-  it("muestra loading, error y empty state", async () => {
+  it("shows loading, error, and empty state", async () => {
     getTasksQueryMock
       .mockReturnValueOnce({ data: undefined, isLoading: true, isError: false })
       .mockReturnValueOnce({ data: undefined, isLoading: false, isError: true })
       .mockReturnValueOnce({ data: [], isLoading: false, isError: false });
 
     const { rerender } = render(<TasksPage />);
-    expect(screen.getByText("Cargando tareas...")).toBeInTheDocument();
+    expect(screen.getByText("Loading tasks...")).toBeInTheDocument();
 
     rerender(<TasksPage />);
     expect(
-      screen.getByText("Error al cargar tareas. Intenta recargar la página.")
+      screen.getByText("Error loading tasks. Try refreshing the page.")
     ).toBeInTheDocument();
 
     rerender(<TasksPage />);
-    expect(screen.getByText("No tienes tareas todavía.")).toBeInTheDocument();
+    expect(screen.getByText("You do not have any tasks yet.")).toBeInTheDocument();
   });
 
-  it("abre y cierra el modal de creación desde el empty state", async () => {
+  it("opens and closes the create modal from the empty state", async () => {
     const user = userEvent.setup();
 
     getTasksQueryMock.mockReturnValue({ data: [], isLoading: false, isError: false });
 
     render(<TasksPage />);
 
-    await user.click(screen.getByRole("button", { name: "Crear la primera" }));
-    expect(screen.getByTestId("task-form")).toHaveTextContent("Nueva tarea");
+    await user.click(screen.getByRole("button", { name: "Create the first one" }));
+    expect(screen.getByTestId("task-form")).toHaveTextContent("New task");
 
-    await user.click(screen.getByRole("button", { name: "Cerrar formulario" }));
+    await user.click(screen.getByRole("button", { name: "Close form" }));
     expect(screen.queryByTestId("task-form")).not.toBeInTheDocument();
   });
 
-  it("renderiza tareas y ejecuta quick status, edit, delete y logout", async () => {
+  it("renders tasks and runs quick status, edit, delete, and logout", async () => {
     const user = userEvent.setup();
     const deleteUnwrap = vi.fn().mockResolvedValue(undefined);
     const updateUnwrap = vi.fn().mockResolvedValue({ ...baseTask, status: "IN_PROGRESS" });
@@ -125,10 +125,10 @@ describe("TasksPage", () => {
     render(<TasksPage />);
 
     expect(screen.getByText("admin@example.com")).toBeInTheDocument();
-    expect(screen.getByText("1 tarea")).toBeInTheDocument();
+    expect(screen.getByText("1 task")).toBeInTheDocument();
     expect(screen.getByText("Preparar release")).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Pendiente" }));
+    await user.click(screen.getByRole("button", { name: "Pending" }));
 
     await waitFor(() => {
       expect(updateTaskMock).toHaveBeenCalledWith({
@@ -137,15 +137,15 @@ describe("TasksPage", () => {
       });
     });
 
-    await user.click(screen.getByRole("button", { name: "Editar" }));
+    await user.click(screen.getByRole("button", { name: "Edit" }));
     expect(screen.getByTestId("task-form")).toHaveTextContent("Preparar release");
 
-    await user.click(screen.getByRole("button", { name: "Eliminar" }));
+    await user.click(screen.getByRole("button", { name: "Delete" }));
     await waitFor(() => {
       expect(deleteTaskMock).toHaveBeenCalledWith("task-1");
     });
 
-    await user.click(screen.getByRole("button", { name: "Cerrar sesión" }));
+    await user.click(screen.getByRole("button", { name: "Sign out" }));
 
     await waitFor(() => {
       expect(dispatchMock).toHaveBeenCalledWith(logout());

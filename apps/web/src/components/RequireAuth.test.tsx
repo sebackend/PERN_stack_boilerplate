@@ -43,7 +43,7 @@ describe("RequireAuth", () => {
     mockState.auth.user = null;
   });
 
-  it("redirige a login si no hay sesión", () => {
+  it("redirects to login when there is no session", () => {
     meQueryMock.mockReturnValue({
       data: undefined,
       isLoading: false,
@@ -60,7 +60,7 @@ describe("RequireAuth", () => {
     expect(screen.getByTestId("navigate")).toHaveTextContent("/login");
   });
 
-  it("muestra estado de carga mientras valida la sesión", () => {
+  it("shows a loading state while validating the session", () => {
     mockState.auth.isAuthenticated = true;
 
     meQueryMock.mockReturnValue({
@@ -76,10 +76,10 @@ describe("RequireAuth", () => {
       </RequireAuth>
     );
 
-    expect(screen.getByText("Verificando sesión...")).toBeInTheDocument();
+    expect(screen.getByText("Verifying session...")).toBeInTheDocument();
   });
 
-  it("hidrata el usuario cuando /me responde y renderiza children", async () => {
+  it("hydrates the user when /me responds and renders children", async () => {
     mockState.auth.isAuthenticated = true;
 
     meQueryMock.mockReturnValue({
@@ -112,7 +112,7 @@ describe("RequireAuth", () => {
     });
   });
 
-  it("redirige a login si falla la validación de sesión", () => {
+  it("redirects to login when session validation fails", () => {
     mockState.auth.isAuthenticated = true;
 
     meQueryMock.mockReturnValue({

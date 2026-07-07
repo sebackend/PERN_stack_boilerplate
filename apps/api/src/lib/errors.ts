@@ -1,4 +1,4 @@
-// ─── Error base de la app ─────────────────────────────────────────────────────
+// ─── Base app error ───────────────────────────────────────────────────────────
 
 export class AppError extends Error {
   readonly statusCode: number;
@@ -13,22 +13,22 @@ export class AppError extends Error {
   }
 }
 
-// ─── Errores tipados ──────────────────────────────────────────────────────────
+// ─── Typed errors ─────────────────────────────────────────────────────────────
 
 export class NotFoundError extends AppError {
-  constructor(resource = "Recurso") {
-    super(`${resource} no encontrado`, 404);
+  constructor(resource = "Resource") {
+    super(`${resource} not found`, 404);
   }
 }
 
 export class UnauthorizedError extends AppError {
-  constructor(message = "No autorizado") {
+  constructor(message = "Unauthorized") {
     super(message, 401);
   }
 }
 
 export class ForbiddenError extends AppError {
-  constructor(message = "Acceso prohibido") {
+  constructor(message = "Forbidden") {
     super(message, 403);
   }
 }
@@ -36,13 +36,13 @@ export class ForbiddenError extends AppError {
 export class ValidationError extends AppError {
   readonly errors: unknown;
   constructor(errors: unknown) {
-    super("Error de validación", 422);
+    super("Validation error", 422);
     this.errors = errors;
   }
 }
 
 export class ConflictError extends AppError {
-  constructor(message = "Conflicto") {
+  constructor(message = "Conflict") {
     super(message, 409);
   }
 }

@@ -17,18 +17,18 @@ describe("TaskForm", () => {
     updateTaskMock.mockReset();
   });
 
-  it("muestra error si el título está vacío", async () => {
+  it("shows an error when the title is empty", async () => {
     const user = userEvent.setup();
 
     render(<TaskForm onClose={vi.fn()} />);
 
-    await user.click(screen.getByRole("button", { name: "Crear" }));
+    await user.click(screen.getByRole("button", { name: "Create" }));
 
-    expect(await screen.findByText("El título es requerido")).toBeInTheDocument();
+    expect(await screen.findByText("Title is required")).toBeInTheDocument();
     expect(createTaskMock).not.toHaveBeenCalled();
   });
 
-  it("crea una tarea con valores trimmeados y cierra el modal", async () => {
+  it("creates a task with trimmed values and closes the modal", async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
     const unwrap = vi.fn().mockResolvedValue({ id: "task-1" });
@@ -37,14 +37,14 @@ describe("TaskForm", () => {
 
     render(<TaskForm onClose={onClose} />);
 
-    await user.type(screen.getByPlaceholderText("Nombre de la tarea"), "  Nueva tarea  ");
-    await user.type(screen.getByPlaceholderText("Descripción opcional..."), "  Revisar PR  ");
-    await user.click(screen.getByRole("button", { name: "Crear" }));
+    await user.type(screen.getByPlaceholderText("Task name"), "  New task  ");
+    await user.type(screen.getByPlaceholderText("Optional description..."), "  Review PR  ");
+    await user.click(screen.getByRole("button", { name: "Create" }));
 
     await waitFor(() => {
       expect(createTaskMock).toHaveBeenCalledWith({
-        title: "Nueva tarea",
-        description: "Revisar PR",
+        title: "New task",
+        description: "Review PR",
         status: "PENDING",
       });
     });

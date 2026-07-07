@@ -3,7 +3,7 @@ import { store } from "./store";
 import { api } from "./api";
 
 describe("store", () => {
-  it("configura reducers de api y auth", () => {
+  it("configures api and auth reducers", () => {
     const state = store.getState();
 
     expect(state).toHaveProperty(api.reducerPath);

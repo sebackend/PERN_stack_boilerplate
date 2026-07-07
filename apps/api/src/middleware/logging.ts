@@ -3,7 +3,7 @@ import type { Options } from "pino-http";
 import type { Request } from "express";
 import { logger } from "../lib/logger.js";
 
-// Campos sensibles que nunca deben aparecer en los logs del body.
+// Sensitive fields that must never appear in request body logs.
 const SENSITIVE_KEYS = new Set([
   "password",
   "passwordHash",
@@ -31,8 +31,8 @@ const options: Options = {
     if (res.statusCode >= 400) return "warn";
     return "info";
   },
-  // El body se agrega vía customProps porque recibe el req real de express
-  // (ya parseado por express.json); el serializer de req no lo expone de forma fiable.
+  // The body is added via customProps because it receives the real Express req
+  // (already parsed by express.json); the req serializer does not expose it reliably.
   customProps: (req) => {
     const body = (req as Request).body as Record<string, unknown> | undefined;
     if (body && typeof body === "object" && Object.keys(body).length > 0) {

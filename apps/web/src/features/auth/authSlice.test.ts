@@ -18,7 +18,7 @@ describe("authSlice", () => {
     localStorage.clear();
   });
 
-  it("guarda credenciales y persiste tokens", () => {
+  it("stores credentials and persists tokens", () => {
     const state = authReducer(
       baseState,
       setCredentials({
@@ -44,7 +44,7 @@ describe("authSlice", () => {
     expect(localStorage.getItem("refreshToken")).toBe("refresh-token");
   });
 
-  it("logout limpia estado y storage", () => {
+  it("logout clears state and storage", () => {
     localStorage.setItem("accessToken", "access-token");
     localStorage.setItem("refreshToken", "refresh-token");
 

@@ -33,7 +33,7 @@ vi.mock("../../store/api", () => ({
 import { authApi } from "./authApi";
 
 describe("authApi", () => {
-  it("define los endpoints esperados de auth", () => {
+  it("defines the expected auth endpoints", () => {
     expect(injectEndpointsMock).toHaveBeenCalledWith(
       expect.objectContaining({ overrideExisting: false })
     );

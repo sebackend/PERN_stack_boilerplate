@@ -9,7 +9,7 @@ export interface JwtPayload {
   type: "access" | "refresh";
 }
 
-// Extender tipos de Express
+// Extend Express types
 declare global {
   namespace Express {
     interface Request {
@@ -26,7 +26,7 @@ export const authenticate = async (
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader?.startsWith("Bearer ")) {
-      return next(new UnauthorizedError("Token no proporcionado"));
+      return next(new UnauthorizedError("Token not provided"));
     }
 
     const token = authHeader.slice(7);
@@ -35,7 +35,7 @@ export const authenticate = async (
     const { payload } = await jwtVerify(token, secret);
 
     if (payload["type"] !== "access") {
-      return next(new UnauthorizedError("Tipo de token inválido"));
+      return next(new UnauthorizedError("Invalid token type"));
     }
 
     req.user = {
@@ -45,6 +45,6 @@ export const authenticate = async (
 
     next();
   } catch {
-    next(new UnauthorizedError("Token inválido o expirado"));
+    next(new UnauthorizedError("Invalid or expired token"));
   }
 };

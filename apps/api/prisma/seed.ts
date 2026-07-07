@@ -4,9 +4,9 @@ import argon2 from "argon2";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("🌱 Ejecutando seed...");
+  console.log("🌱 Running seed...");
 
-  // Crear usuario de prueba
+  // Create sample user
   const passwordHash = await argon2.hash("password123");
 
   const admin = await prisma.user.upsert({
@@ -18,26 +18,26 @@ async function main() {
     },
   });
 
-  console.log(`✅ Usuario creado: ${admin.email} (id: ${admin.id})`);
+  console.log(`✅ User created: ${admin.email} (id: ${admin.id})`);
 
-  // Crear tareas de ejemplo
+  // Create sample tasks
   await prisma.task.createMany({
     data: [
       {
-        title: "Configurar entorno de desarrollo",
-        description: "Instalar dependencias y configurar variables de entorno",
+        title: "Set up the development environment",
+        description: "Install dependencies and configure environment variables",
         status: "DONE",
         userId: admin.id,
       },
       {
-        title: "Implementar autenticación JWT",
-        description: "Login con argon2 + jose",
+        title: "Implement JWT authentication",
+        description: "Login with argon2 + jose",
         status: "IN_PROGRESS",
         userId: admin.id,
       },
       {
-        title: "Escribir tests de integración",
-        description: "Cubrir endpoints de auth y tasks con Supertest",
+        title: "Write integration tests",
+        description: "Cover auth and task endpoints with Supertest",
         status: "PENDING",
         userId: admin.id,
       },
@@ -45,10 +45,10 @@ async function main() {
     skipDuplicates: true,
   });
 
-  console.log("✅ Tareas de ejemplo creadas");
+  console.log("✅ Sample tasks created");
   console.log("");
   console.log("─────────────────────────────────────────");
-  console.log("Credenciales de prueba:");
+  console.log("Sample credentials:");
   console.log("  Email:    admin@example.com");
   console.log("  Password: password123");
   console.log("─────────────────────────────────────────");

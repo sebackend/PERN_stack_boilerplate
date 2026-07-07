@@ -7,13 +7,13 @@ export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Ruta raíz → redirect según estado de auth */}
+        {/* Root route redirects based on auth state */}
         <Route path="/" element={<Navigate to="/tasks" replace />} />
 
-        {/* Login público */}
+        {/* Public login */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Rutas protegidas */}
+        {/* Protected routes */}
         <Route
           path="/tasks"
           element={

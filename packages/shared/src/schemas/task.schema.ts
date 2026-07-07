@@ -8,7 +8,7 @@ export type TaskStatus = z.infer<typeof TaskStatusEnum>;
 // ─── Input schemas ───────────────────────────────────────────────────────────
 
 export const CreateTaskSchema = z.object({
-  title: z.string().min(1, "El título es requerido").max(200),
+  title: z.string().min(1, "Title is required").max(200),
   description: z.string().max(2000).optional(),
   status: TaskStatusEnum.optional(),
 });
@@ -24,7 +24,7 @@ export const UpdateTaskSchema = z.object({
 export type UpdateTaskInput = z.infer<typeof UpdateTaskSchema>;
 
 export const TaskIdParamsSchema = z.object({
-  id: z.string().trim().min(1, "El id es requerido").max(191, "El id es inválido"),
+  id: z.string().trim().min(1, "ID is required").max(191, "Invalid ID"),
 });
 
 export type TaskIdParams = z.infer<typeof TaskIdParamsSchema>;

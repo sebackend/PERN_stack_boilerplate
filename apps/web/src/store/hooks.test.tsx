@@ -17,7 +17,7 @@ function HooksProbe() {
 }
 
 describe("store hooks", () => {
-  it("expone hooks tipados sobre el store", () => {
+  it("exposes typed hooks over the store", () => {
     render(
       <Provider store={store}>
         <HooksProbe />

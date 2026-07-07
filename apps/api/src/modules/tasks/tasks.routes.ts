@@ -6,7 +6,7 @@ import { CreateTaskSchema, TaskIdParamsSchema, UpdateTaskSchema } from "@repo/sh
 
 export const tasksRoutes: ExpressRouter = Router();
 
-// Todas las rutas de tareas requieren autenticación
+// All task routes require authentication.
 tasksRoutes.use(authenticate);
 
 // GET /api/v1/tasks
