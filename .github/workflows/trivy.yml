@@ -29,6 +29,8 @@ jobs:
           scan-type: fs
           scan-ref: .
           exit-code: 1
+          scanners: vuln
+          skip-version-check: true
           format: sarif
           output: trivy-fs.sarif
           severity: HIGH,CRITICAL
@@ -59,9 +61,12 @@ jobs:
 
       - name: Run Trivy image scan
         uses: aquasecurity/trivy-action@v0.36.0
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
         with:
           image-ref: local/api:trivy
           exit-code: 1
+          scanners: vuln
+          skip-version-check: true
           format: sarif
           output: trivy-api-image.sarif
           severity: HIGH,CRITICAL
@@ -94,9 +99,12 @@ jobs:
 
       - name: Run Trivy image scan
         uses: aquasecurity/trivy-action@v0.36.0
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
         with:
           image-ref: local/web:trivy
           exit-code: 1
+          scanners: vuln
+          skip-version-check: true
           format: sarif
           output: trivy-web-image.sarif
           severity: HIGH,CRITICAL

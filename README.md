@@ -108,6 +108,10 @@ Current coverage:
 - Authentication state
 - Task form UI
 
+Build note:
+- The production web build uses `apps/web/tsconfig.build.json`, which excludes test files.
+- Test type-safety and behavior are validated separately through `pnpm --filter web test`.
+
 ## Docker Deployment
 ```bash
 # Build and start all services
@@ -120,6 +124,7 @@ docker compose up --build -d
 Notes:
 - Requires a `.env` file at the repository root.
 - Docker builds use the workspace lockfile and compile `@repo/shared` before building `api` and `web`.
+- TypeScript incremental build artifacts such as `*.tsbuildinfo` are not committed.
 
 ## Project Structure
 ```

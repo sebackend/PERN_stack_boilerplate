@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "pnpm --filter @repo/shared build && tsc -p tsconfig.json && vite build",
+    "build": "pnpm --filter @repo/shared build && tsc -p tsconfig.build.json && vite build",
     "preview": "vite preview",
     "lint": "eslint src",
     "test": "pnpm --filter @repo/shared build && vitest run",

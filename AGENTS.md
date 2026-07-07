@@ -183,6 +183,13 @@ When changing a contract:
 3. Update API handlers and frontend consumers together.
 4. Update tests on both sides when behavior changes.
 
+TypeScript build notes:
+
+- `packages/shared` must emit declarations successfully before `api` or `web` Docker builds can pass.
+- `apps/api` uses TypeScript build mode (`tsc -b`) to honor the project graph more reliably.
+- `apps/web/tsconfig.build.json` is the production build config and excludes test files.
+- Do not commit incremental TypeScript artifacts such as `*.tsbuildinfo`.
+
 ## Testing
 
 Current testing stack:
@@ -202,6 +209,7 @@ When making changes:
 - Add or update focused tests near the affected module.
 - Prefer app-specific test runs during iteration.
 - Run the relevant root or package-level tests before finishing.
+- Do not rely on the production web build to type-check frontend tests; `web` tests are validated through Vitest separately.
 
 ## Docker And Deployment
 
@@ -217,6 +225,7 @@ Operational detail:
 - The API image runs Prisma generate during build.
 - The API entrypoint applies migrations before startup.
 - The web image serves the built SPA through Nginx.
+- The Docker build expects `@repo/shared` declarations to be generated during the image build, not pre-committed from local `dist` output.
 
 ## Security Automation
 
