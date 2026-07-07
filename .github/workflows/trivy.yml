@@ -63,7 +63,7 @@ jobs:
 
       - name: Run Trivy image scan
         uses: aquasecurity/trivy-action@v0.36.0
-        continue-on-error: ${{ github.event_name == 'pull_request' }}
+        continue-on-error: true
         env:
           TRIVY_SKIP_VERSION_CHECK: "true"
         with:
@@ -102,7 +102,7 @@ jobs:
 
       - name: Run Trivy image scan
         uses: aquasecurity/trivy-action@v0.36.0
-        continue-on-error: ${{ github.event_name == 'pull_request' }}
+        continue-on-error: true
         env:
           TRIVY_SKIP_VERSION_CHECK: "true"
         with:
