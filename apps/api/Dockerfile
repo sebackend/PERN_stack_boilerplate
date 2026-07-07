@@ -14,6 +14,7 @@ COPY packages/shared ./packages/shared
 # Copy API files
 COPY apps/api/package.json ./apps/api/package.json
 COPY apps/api/tsconfig.json ./apps/api/tsconfig.json
+COPY apps/api/prisma.config.ts ./apps/api/prisma.config.ts
 COPY apps/api/prisma ./apps/api/prisma
 
 # Install dependencies

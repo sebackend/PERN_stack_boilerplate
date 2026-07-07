@@ -8,3 +8,5 @@ dist
 **/.vite
 .env
 *.log
+*.tsbuildinfo
+**/*.tsbuildinfo
