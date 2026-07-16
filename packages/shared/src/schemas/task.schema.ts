@@ -5,12 +5,17 @@ import { z } from "zod";
 export const TaskStatusEnum = z.enum(["PENDING", "IN_PROGRESS", "DONE"]);
 export type TaskStatus = z.infer<typeof TaskStatusEnum>;
 
+export const TaskPriorityEnum = z.enum(["LOW", "MEDIUM", "HIGH"]);
+export type TaskPriority = z.infer<typeof TaskPriorityEnum>;
+
 // ─── Input schemas ───────────────────────────────────────────────────────────
 
 export const CreateTaskSchema = z.object({
   title: z.string().min(1, "Title is required").max(200),
   description: z.string().max(2000).optional(),
   status: TaskStatusEnum.optional(),
+  priority: TaskPriorityEnum.optional(),
+  dueDate: z.string().datetime().nullable().optional(),
 });
 
 export type CreateTaskInput = z.infer<typeof CreateTaskSchema>;
@@ -19,6 +24,8 @@ export const UpdateTaskSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   description: z.string().max(2000).nullable().optional(),
   status: TaskStatusEnum.optional(),
+  priority: TaskPriorityEnum.optional(),
+  dueDate: z.string().datetime().nullable().optional(),
 });
 
 export type UpdateTaskInput = z.infer<typeof UpdateTaskSchema>;
@@ -36,6 +43,8 @@ export const TaskResponseSchema = z.object({
   title: z.string(),
   description: z.string().nullable(),
   status: TaskStatusEnum,
+  priority: TaskPriorityEnum,
+  dueDate: z.string().nullable(),
   userId: z.string(),
   createdAt: z.string(),
   updatedAt: z.string(),

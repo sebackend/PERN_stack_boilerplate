@@ -6,6 +6,8 @@ function serializeTask(task: {
   title: string;
   description: string | null;
   status: "PENDING" | "IN_PROGRESS" | "DONE";
+  priority: "LOW" | "MEDIUM" | "HIGH";
+  dueDate: Date | null;
   userId: string;
   createdAt: Date;
   updatedAt: Date;
@@ -15,6 +17,8 @@ function serializeTask(task: {
     title: task.title,
     description: task.description,
     status: task.status,
+    priority: task.priority,
+    dueDate: task.dueDate ? task.dueDate.toISOString() : null,
     userId: task.userId,
     createdAt: task.createdAt.toISOString(),
     updatedAt: task.updatedAt.toISOString(),
@@ -25,7 +29,7 @@ export const tasksQuery = {
   async findAll(userId: string): Promise<TaskResponse[]> {
     const tasks = await prisma.task.findMany({
       where: { userId },
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ dueDate: { sort: "asc", nulls: "last" } }, { createdAt: "desc" }],
     });
     return tasks.map(serializeTask);
   },

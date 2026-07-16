@@ -7,6 +7,8 @@ function serializeTask(task: {
   title: string;
   description: string | null;
   status: "PENDING" | "IN_PROGRESS" | "DONE";
+  priority: "LOW" | "MEDIUM" | "HIGH";
+  dueDate: Date | null;
   userId: string;
   createdAt: Date;
   updatedAt: Date;
@@ -16,6 +18,8 @@ function serializeTask(task: {
     title: task.title,
     description: task.description,
     status: task.status,
+    priority: task.priority,
+    dueDate: task.dueDate ? task.dueDate.toISOString() : null,
     userId: task.userId,
     createdAt: task.createdAt.toISOString(),
     updatedAt: task.updatedAt.toISOString(),
@@ -29,6 +33,8 @@ export const tasksService = {
         title: input.title,
         description: input.description,
         status: input.status ?? ("PENDING" as const),
+        priority: input.priority ?? ("MEDIUM" as const),
+        dueDate: input.dueDate ? new Date(input.dueDate) : null,
         userId,
       },
     });
@@ -49,6 +55,10 @@ export const tasksService = {
         ...(input.title !== undefined && { title: input.title }),
         ...(input.description !== undefined && { description: input.description }),
         ...(input.status !== undefined && { status: input.status }),
+        ...(input.priority !== undefined && { priority: input.priority }),
+        ...(input.dueDate !== undefined && {
+          dueDate: input.dueDate ? new Date(input.dueDate) : null,
+        }),
       },
     });
     return serializeTask(task);

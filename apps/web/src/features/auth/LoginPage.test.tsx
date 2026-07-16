@@ -55,7 +55,7 @@ describe("LoginPage", () => {
     expect(navigateMock).not.toHaveBeenCalled();
   });
 
-  it("stores credentials, loads the user, and navigates to tasks", async () => {
+  it("stores credentials, loads the user, and navigates to dashboard", async () => {
     const user = userEvent.setup();
     const loginUnwrap = vi.fn().mockResolvedValue({
       accessToken: "access-token",
@@ -92,7 +92,7 @@ describe("LoginPage", () => {
         createdAt: "2026-01-01T00:00:00.000Z",
       })
     );
-    expect(navigateMock).toHaveBeenCalledWith("/tasks");
+    expect(navigateMock).toHaveBeenCalledWith("/dashboard");
   });
 
   it("navigates even if /auth/me fails after login", async () => {
@@ -123,6 +123,6 @@ describe("LoginPage", () => {
       );
     });
 
-    expect(navigateMock).toHaveBeenCalledWith("/tasks");
+    expect(navigateMock).toHaveBeenCalledWith("/dashboard");
   });
 });

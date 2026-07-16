@@ -43,7 +43,7 @@ export default function LoginPage() {
       // If /auth/me fails, still navigate; the app will retry during rendering.
     }
 
-    navigate("/tasks");
+    navigate("/dashboard");
   };
 
   return (

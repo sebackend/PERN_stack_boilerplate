@@ -46,6 +46,8 @@ describe("TaskForm", () => {
         title: "New task",
         description: "Review PR",
         status: "PENDING",
+        priority: "MEDIUM",
+        dueDate: null,
       });
     });
 

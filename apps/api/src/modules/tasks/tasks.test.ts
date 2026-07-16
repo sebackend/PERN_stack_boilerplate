@@ -16,6 +16,8 @@ const baseTask = {
   title: "Test task",
   description: null,
   status: "PENDING" as const,
+  priority: "MEDIUM" as const,
+  dueDate: null,
   userId: "user-1",
   createdAt: new Date("2026-01-01"),
   updatedAt: new Date("2026-01-01"),
@@ -59,6 +61,29 @@ describe("tasksService", () => {
 
     expect(result.title).toBe("New task");
     expect(result.userId).toBe("user-1");
+  });
+
+  it("create persists priority and serializes dueDate to an ISO string", async () => {
+    const due = new Date("2026-02-01T00:00:00.000Z");
+    mockPrismaTask.create.mockResolvedValue({
+      ...baseTask,
+      priority: "HIGH",
+      dueDate: due,
+    });
+
+    const result = await tasksService.create("user-1", {
+      title: "New task",
+      priority: "HIGH",
+      dueDate: due.toISOString(),
+    });
+
+    expect(mockPrismaTask.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ priority: "HIGH", dueDate: due }),
+      })
+    );
+    expect(result.priority).toBe("HIGH");
+    expect(result.dueDate).toBe(due.toISOString());
   });
 
   it("delete throws NotFoundError when the task does not belong to the user", async () => {

@@ -28,10 +28,12 @@ model User {
 }
 
 model Task {
-  id          String     @id @default(cuid())
-  title       String     @db.VarChar(200)
-  description String?    @db.Text
-  status      TaskStatus @default(PENDING)
+  id          String       @id @default(cuid())
+  title       String       @db.VarChar(200)
+  description String?      @db.Text
+  status      TaskStatus   @default(PENDING)
+  priority    TaskPriority @default(MEDIUM)
+  dueDate     DateTime?
 
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -47,4 +49,10 @@ enum TaskStatus {
   PENDING
   IN_PROGRESS
   DONE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
 }

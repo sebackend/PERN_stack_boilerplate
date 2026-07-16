@@ -23,24 +23,31 @@ async function main() {
   console.log(`✅ User created: ${admin.email} (id: ${admin.id})`);
 
   // Create sample tasks
+  const day = 24 * 60 * 60 * 1000;
   await prisma.task.createMany({
     data: [
       {
         title: "Set up the development environment",
         description: "Install dependencies and configure environment variables",
         status: "DONE",
+        priority: "MEDIUM",
+        dueDate: new Date(Date.now() - 3 * day),
         userId: admin.id,
       },
       {
         title: "Implement JWT authentication",
         description: "Login with argon2 + jose",
         status: "IN_PROGRESS",
+        priority: "HIGH",
+        dueDate: new Date(Date.now() + 2 * day),
         userId: admin.id,
       },
       {
         title: "Write integration tests",
         description: "Cover auth and task endpoints with Supertest",
         status: "PENDING",
+        priority: "LOW",
+        dueDate: new Date(Date.now() + 7 * day),
         userId: admin.id,
       },
     ],

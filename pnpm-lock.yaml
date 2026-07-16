@@ -105,12 +105,21 @@ importers:
 
   apps/web:
     dependencies:
+      '@fontsource-variable/geist':
+        specifier: ^5.2.9
+        version: 5.2.9
+      '@fontsource-variable/jetbrains-mono':
+        specifier: ^5.2.8
+        version: 5.2.8
       '@reduxjs/toolkit':
         specifier: ^2.5.0
         version: 2.12.0(react-redux@9.3.0(@types/react@19.2.17)(react@19.2.7)(redux@5.0.1))(react@19.2.7)
       '@repo/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      lucide-react:
+        specifier: ^1.24.0
+        version: 1.24.0(react@19.2.7)
       react:
         specifier: ^19.0.0
         version: 19.2.7
@@ -531,6 +540,12 @@ packages:
     peerDependenciesMeta:
       '@noble/hashes':
         optional: true
+
+  '@fontsource-variable/geist@5.2.9':
+    resolution: {integrity: sha512-TP+QSBG3wxKGPE33CbMy/L0Nu3qvJ6Fy81Yc4LnQ95xH+i+cfEp8fyU8/kfV14YwszxIFPhnoMTbjL71waVpyQ==}
+
+  '@fontsource-variable/jetbrains-mono@5.2.8':
+    resolution: {integrity: sha512-WBA9elru6Jdp5df2mES55wuOO0WIrn3kpXnI4+W2ek5u3ZgLS9XS4gmIlcQhiZOWEKl95meYdvK7xI+ETLCq/Q==}
 
   '@hono/node-server@1.19.11':
     resolution: {integrity: sha512-dr8/3zEaB+p0D2n/IUrlPF1HZm586qgJNXK1a9fhg/PzdtkK7Ksd5l312tJX2yBuALqDYBlG20QEbayqPyxn+g==}
@@ -2035,6 +2050,11 @@ packages:
     resolution: {integrity: sha512-DqC6n3QQ77zdFpCMASA1a3Jlb64Hv2N2DciFGkO/4L9+q/IpIAuRlKOvCXabtRW6cQf8usbmM6BE/TOPysCdIA==}
     engines: {bun: '>=1.0.0', deno: '>=1.30.0', node: '>=8.0.0'}
 
+  lucide-react@1.24.0:
+    resolution: {integrity: sha512-YT6mBD8lGKkg4nM39enlm94/sfJIiW0YKUT60fBy4YK8tai31ylg1VhGNWxkpSKHo9UagfnZqwIff3HTDQwXeA==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   luxon@3.7.2:
     resolution: {integrity: sha512-vtEhXh/gNjI9Yg1u4jX/0YVPMvxzHuGgCm6tC5kZyb08yjGWGnqAjGJvcXbqQR2P3MyMEFnRbpcdFS6PBcLqew==}
     engines: {node: '>=12'}
@@ -3094,6 +3114,10 @@ snapshots:
   '@exodus/bytes@1.15.1(@noble/hashes@1.8.0)':
     optionalDependencies:
       '@noble/hashes': 1.8.0
+
+  '@fontsource-variable/geist@5.2.9': {}
+
+  '@fontsource-variable/jetbrains-mono@5.2.8': {}
 
   '@hono/node-server@1.19.11(hono@4.12.28)':
     dependencies:
@@ -4620,6 +4644,10 @@ snapshots:
   lru-cache@11.5.1: {}
 
   lru.min@1.1.4: {}
+
+  lucide-react@1.24.0(react@19.2.7):
+    dependencies:
+      react: 19.2.7
 
   luxon@3.7.2: {}
 

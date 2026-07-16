@@ -3,7 +3,12 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import AppRouter from "./router";
+import "@fontsource-variable/geist";
+import "@fontsource-variable/jetbrains-mono";
 import "./index.css";
+import { applyStoredTheme } from "./features/dashboard/useTheme";
+
+applyStoredTheme();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

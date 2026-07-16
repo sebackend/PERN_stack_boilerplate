@@ -1,58 +1,52 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { TaskResponse } from "@repo/shared";
 import TasksPage from "./TasksPage";
-import { logout } from "../auth/authSlice";
 
-const navigateMock = vi.fn();
-const dispatchMock = vi.fn();
 const getTasksQueryMock = vi.fn();
 const deleteTaskMock = vi.fn();
 const updateTaskMock = vi.fn();
-const logoutMutationMock = vi.fn();
 
-const mockState = {
-  auth: {
-    user: {
-      id: "user-1",
-      email: "admin@example.com",
-      createdAt: "2026-01-01T00:00:00.000Z",
-    },
-  },
-};
-
-const baseTask = {
+const baseTask: TaskResponse = {
   id: "task-1",
   title: "Preparar release",
   description: "Validar entregables",
-  status: "PENDING" as const,
+  status: "PENDING",
+  priority: "MEDIUM",
+  dueDate: null,
   userId: "user-1",
   createdAt: "2026-01-01T00:00:00.000Z",
   updatedAt: "2026-01-01T00:00:00.000Z",
 };
 
-vi.mock("react-router", async () => {
-  const actual = await vi.importActual<typeof import("react-router")>("react-router");
-
-  return {
-    ...actual,
-    useNavigate: () => navigateMock,
-  };
-});
-
-vi.mock("../../store/hooks", () => ({
-  useAppDispatch: () => dispatchMock,
-  useAppSelector: (selector: (state: typeof mockState) => unknown) => selector(mockState),
-}));
-
-vi.mock("../auth/authApi", () => ({
-  useLogoutMutation: () => [logoutMutationMock],
+// DashboardLayout pulls in the Sidebar (NavLink/Router); stub it to a passthrough
+// so this test focuses on the page's own query/modal/table behavior.
+vi.mock("../dashboard/DashboardLayout", () => ({
+  default: ({
+    title,
+    subtitle,
+    actions,
+    children,
+  }: {
+    title: string;
+    subtitle?: string;
+    actions: React.ReactNode;
+    children: React.ReactNode;
+  }) => (
+    <div>
+      <h1>{title}</h1>
+      {subtitle && <p>{subtitle}</p>}
+      {actions}
+      {children}
+    </div>
+  ),
 }));
 
 vi.mock("./tasksApi", () => ({
   useGetTasksQuery: () => getTasksQueryMock(),
   useDeleteTaskMutation: () => [deleteTaskMock, { isLoading: false }],
-  useUpdateTaskMutation: () => [updateTaskMock],
+  useUpdateTaskMutation: () => [updateTaskMock, { isLoading: false }],
 }));
 
 vi.mock("./TaskForm", () => ({
@@ -66,12 +60,9 @@ vi.mock("./TaskForm", () => ({
 
 describe("TasksPage", () => {
   beforeEach(() => {
-    navigateMock.mockReset();
-    dispatchMock.mockReset();
     getTasksQueryMock.mockReset();
     deleteTaskMock.mockReset();
     updateTaskMock.mockReset();
-    logoutMutationMock.mockReset();
     vi.stubGlobal("confirm", vi.fn(() => true));
   });
 
@@ -82,7 +73,7 @@ describe("TasksPage", () => {
       .mockReturnValueOnce({ data: [], isLoading: false, isError: false });
 
     const { rerender } = render(<TasksPage />);
-    expect(screen.getByText("Loading tasks...")).toBeInTheDocument();
+    expect(screen.getByText("Loading tasks…")).toBeInTheDocument();
 
     rerender(<TasksPage />);
     expect(
@@ -90,7 +81,7 @@ describe("TasksPage", () => {
     ).toBeInTheDocument();
 
     rerender(<TasksPage />);
-    expect(screen.getByText("You do not have any tasks yet.")).toBeInTheDocument();
+    expect(screen.getByText("No tasks yet.")).toBeInTheDocument();
   });
 
   it("opens and closes the create modal from the empty state", async () => {
@@ -107,11 +98,10 @@ describe("TasksPage", () => {
     expect(screen.queryByTestId("task-form")).not.toBeInTheDocument();
   });
 
-  it("renders tasks and runs quick status, edit, delete, and logout", async () => {
+  it("renders tasks and runs quick status, edit, and delete", async () => {
     const user = userEvent.setup();
     const deleteUnwrap = vi.fn().mockResolvedValue(undefined);
     const updateUnwrap = vi.fn().mockResolvedValue({ ...baseTask, status: "IN_PROGRESS" });
-    const logoutUnwrap = vi.fn().mockResolvedValue({ message: "ok" });
 
     getTasksQueryMock.mockReturnValue({
       data: [baseTask],
@@ -120,16 +110,13 @@ describe("TasksPage", () => {
     });
     deleteTaskMock.mockReturnValue({ unwrap: deleteUnwrap });
     updateTaskMock.mockReturnValue({ unwrap: updateUnwrap });
-    logoutMutationMock.mockReturnValue({ unwrap: logoutUnwrap });
 
     render(<TasksPage />);
 
-    expect(screen.getByText("admin@example.com")).toBeInTheDocument();
     expect(screen.getByText("1 task")).toBeInTheDocument();
     expect(screen.getByText("Preparar release")).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Pending" }));
-
+    await user.click(screen.getByRole("button", { name: /pending/i }));
     await waitFor(() => {
       expect(updateTaskMock).toHaveBeenCalledWith({
         id: "task-1",
@@ -144,12 +131,5 @@ describe("TasksPage", () => {
     await waitFor(() => {
       expect(deleteTaskMock).toHaveBeenCalledWith("task-1");
     });
-
-    await user.click(screen.getByRole("button", { name: "Sign out" }));
-
-    await waitFor(() => {
-      expect(dispatchMock).toHaveBeenCalledWith(logout());
-    });
-    expect(navigateMock).toHaveBeenCalledWith("/login");
   });
 });

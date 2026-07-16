@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { TaskResponse, TaskStatus } from "@repo/shared";
+import type { TaskResponse, TaskStatus, TaskPriority } from "@repo/shared";
 import { useCreateTaskMutation, useUpdateTaskMutation } from "./tasksApi";
 
 interface TaskFormProps {
@@ -13,12 +13,25 @@ const STATUS_LABELS: Record<TaskStatus, string> = {
   DONE: "Done",
 };
 
+const PRIORITY_LABELS: Record<TaskPriority, string> = {
+  LOW: "Low",
+  MEDIUM: "Medium",
+  HIGH: "High",
+};
+
+// A date-only input value ("YYYY-MM-DD") -> ISO datetime, or null when empty.
+function toIsoDueDate(value: string): string | null {
+  return value ? new Date(`${value}T00:00:00.000Z`).toISOString() : null;
+}
+
 export default function TaskForm({ task, onClose }: TaskFormProps) {
   const isEditing = !!task;
 
   const [title, setTitle] = useState(task?.title ?? "");
   const [description, setDescription] = useState(task?.description ?? "");
   const [status, setStatus] = useState<TaskStatus>(task?.status ?? "PENDING");
+  const [priority, setPriority] = useState<TaskPriority>(task?.priority ?? "MEDIUM");
+  const [dueDate, setDueDate] = useState(task?.dueDate ? task.dueDate.slice(0, 10) : "");
   const [error, setError] = useState("");
 
   const [createTask, { isLoading: isCreating }] = useCreateTaskMutation();
@@ -41,12 +54,16 @@ export default function TaskForm({ task, onClose }: TaskFormProps) {
           title: title.trim(),
           description: description.trim() || undefined,
           status,
+          priority,
+          dueDate: toIsoDueDate(dueDate),
         }).unwrap();
       } else {
         await createTask({
           title: title.trim(),
           description: description.trim() || undefined,
           status,
+          priority,
+          dueDate: toIsoDueDate(dueDate),
         }).unwrap();
       }
       onClose();
@@ -113,6 +130,39 @@ export default function TaskForm({ task, onClose }: TaskFormProps) {
                 </option>
               ))}
             </select>
+          </div>
+
+          {/* Priority + Due date */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Priority
+              </label>
+              <select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value as TaskPriority)}
+                className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                {(Object.keys(PRIORITY_LABELS) as TaskPriority[]).map((p) => (
+                  <option key={p} value={p}>
+                    {PRIORITY_LABELS[p]}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Due date
+              </label>
+              <input
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
+                className="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-sm
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
           </div>
 
           {/* Error */}
