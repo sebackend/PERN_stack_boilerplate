@@ -11,11 +11,11 @@
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\" --ignore-path .gitignore"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^4.1.10",
-    "turbo": "^2.10.4",
-    "prettier": "^3.9.4",
-    "eslint": "^10.6.0",
-    "typescript": "^6.0.3"
+    "@vitest/coverage-v8": "^5.0.2",
+    "turbo": "^2.11.5",
+    "prettier": "^3.9.9",
+    "eslint": "^10.11.0",
+    "typescript": "^7.0.2"
   },
   "engines": {
     "node": ">=20.0.0",

@@ -18,10 +18,10 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "zod": "^4.4.3"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   }
 }
