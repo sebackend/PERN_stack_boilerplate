@@ -21,6 +21,14 @@ updates:
           - patch
     ignore:
       - dependency-name: "node"
+      # typescript-eslint does not support TypeScript 7 yet.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      # Vitest 5 breaks the RTK Query endpoint tests in apps/web; migrate in a dedicated PR.
+      - dependency-name: "vitest"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@vitest/coverage-v8"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: "/"
