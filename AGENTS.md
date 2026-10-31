@@ -34,7 +34,7 @@ Key files:
 - `apps/api/src/server.ts`: API server startup and shutdown
 - `apps/web/src/main.tsx`: React entry point
 - `apps/web/src/router.tsx`: app routes
-- `.github/workflows/`: security automation with Trivy and CodeQL
+- `.github/workflows/`: CI quality checks plus security automation with Trivy and CodeQL
 
 ## Runtime And Tooling
 
@@ -232,12 +232,14 @@ Operational detail:
 This repository includes:
 
 - `.github/dependabot.yml`
+- `.github/workflows/ci.yml`
 - `.github/workflows/trivy.yml`
 - `.github/workflows/codeql.yml`
 
 These handle:
 
 - dependency update PRs
+- lint, test, and build checks on every PR
 - vulnerability scanning for dependencies and Docker images
 - static analysis for JavaScript/TypeScript
 
